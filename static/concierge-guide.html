@@ -79,6 +79,16 @@
     transition: box-shadow 0.3s ease;
   }
   .item-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+
+  /* Card image */
+  .item-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    background: #eee;
+  }
+
   .item-info { padding: 24px 28px 28px; }
   .item-name {
     font-family: 'Cormorant Garamond', Georgia, serif;
@@ -135,6 +145,7 @@
   .badge-michelin { background: #c9283b; color: #fff; }
   .badge-family { background: #2a7d4f; color: #fff; }
   .badge-resort { background: #c9a96e; color: #0a1628; }
+  .badge-seasonal { background: #d4a03c; color: #fff; }
 
   /* Quick links bar */
   .quick-nav {
@@ -158,6 +169,36 @@
     transition: all 0.2s;
   }
   .quick-nav a:hover { background: #0a1628; color: #c9a96e; border-color: #0a1628; }
+
+  /* Section hero banner */
+  .section-hero {
+    width: calc(100% - 64px);
+    margin: 0 32px 24px;
+    height: 200px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    background: #eee;
+  }
+  .section-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .section-hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 24px 16px;
+    background: linear-gradient(transparent, rgba(10,22,40,0.7));
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 400;
+  }
 
   /* Footer */
   .footer {
@@ -188,8 +229,10 @@
     .intro { padding-left: 28px; padding-right: 28px; }
     .item-card { margin: 0 16px 20px; }
     .item-info { padding: 20px 20px 24px; }
+    .item-img { height: 180px; }
     .quick-nav { gap: 6px; padding: 0 16px 8px; }
     .quick-nav a { font-size: 10px; padding: 6px 12px; }
+    .section-hero { width: calc(100% - 32px); margin: 0 16px 20px; height: 160px; }
   }
 </style>
 </head>
@@ -226,6 +269,7 @@
   <div class="section-label">Onsite Dining</div>
 
   <div class="item-card">
+    <img class="item-img" src="https://parkhyattaviara.com/media_files/images/Ember__Rye_-_Winter_2021_Chef_Blais-2.max-1024x1024.jpg" alt="Ember &amp; Rye restaurant interior" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://parkhyattaviara.com/resort-dining/ember-and-rye/">Ember &amp; Rye</a>
@@ -240,6 +284,7 @@
   </div>
 
   <div class="item-card">
+    <img class="item-img" src="https://parkhyattaviara.com/media_files/images/Park-Hyatt-Aviara-Ponto-Lago-Terrace-Day_r.max-1024x1024.jpg" alt="Ponto Lago terrace with lagoon views" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://parkhyattaviara.com/resort-dining/ponto-lago/">Ponto Lago</a>
@@ -254,6 +299,7 @@
   </div>
 
   <div class="item-card">
+    <img class="item-img" src="https://parkhyattaviara.com/media_files/images/AwayLands-Aviara-FinalPhotos_-_low_res.max-1024x1024.jpg" alt="Pacific Point Lounge terrace at sunset" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://parkhyattaviara.com/resort-dining/">Pacific Point Lounge</a>
@@ -268,6 +314,7 @@
   </div>
 
   <div class="item-card">
+    <img class="item-img" src="https://parkhyattaviara.com/media_files/images/Park-Hyatt-Aviara-Family-Dining-Waters-Edg.max-1024x1024_NYtRuHq.jpg" alt="Water's Edge poolside dining" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://parkhyattaviara.com/resort-dining/">Water's Edge</a>
@@ -282,6 +329,7 @@
   </div>
 
   <div class="item-card">
+    <img class="item-img" src="https://parkhyattaviara.com/media_files/images/Park-Hyatt-Aviara-Market.max-1024x1024.jpg" alt="Aviara Market grab and go" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://parkhyattaviara.com/resort-dining/">Aviara Market</a>
@@ -303,8 +351,8 @@
   <div id="offsite-dining"></div>
   <div class="section-label">Offsite Dining</div>
 
-  <!-- Carlsbad -->
   <div class="item-card">
+    <img class="item-img" src="https://static1.squarespace.com/static/5c8aa5ec755be25d2ecf197a/t/5c8beb4beef1a1887da28276/1552673616276/2019_01_07_Jeune-et-Jolie-32.jpg" alt="Jeune et Jolie dining room" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://www.jeune-jolie.com/">Jeune et Jolie</a>
@@ -312,13 +360,14 @@
       </div>
       <div class="item-tag">French &middot; Carlsbad &middot; 10 min</div>
       <div class="item-desc">
-        A Michelin-starred French restaurant on State Street with a chic, rose-hued dining room flooded with natural light. Chef Eric Bost's four-course prix fixe ($105/pp) is an exquisite experience. Walk-in à la carte also available at the bar.
+        A Michelin-starred French restaurant on State Street with a chic, rose-hued dining room flooded with natural light. Chef Eric Bost's four-course prix fixe ($105/pp) is an exquisite experience. Walk-in &agrave; la carte also available at the bar.
       </div>
       <div class="item-meta">2659 State St, Carlsbad &middot; (760) 637-5266 &middot; <a href="https://www.opentable.com/r/jeune-et-jolie-san-diego">Reserve on OpenTable</a></div>
     </div>
   </div>
 
   <div class="item-card">
+    <img class="item-img" src="https://images.squarespace-cdn.com/content/v1/60873d668f77107da17fda7f/1620590901892-OUZWXMHQ8N9ZL8BGVK7O/ke17ZwdGBToddI8pDm48kHH9S2ID7_bpupQnTdrPcoF7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0nQwvinDXPV4EYh2MRzm-RRB5rUELEv7EY2n0AZOrEupxpSyqbqKSgmzcCPWV5WMiQ/web_background.jpg" alt="Campfire restaurant live-fire hearth" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://www.thisiscampfire.com/">Campfire</a>
@@ -359,7 +408,6 @@
     </div>
   </div>
 
-  <!-- Encinitas -->
   <div class="item-card">
     <div class="item-info">
       <div class="item-name">
@@ -395,6 +443,7 @@
   <div class="section-label">Resort Experiences</div>
 
   <div class="item-card">
+    <img class="item-img" src="https://parkhyattaviara.com/media_files/images/SANPA-Miraval-Life-In-Balanc.2e16d0ba.fill-1600x900-c100_iiWR6wZ.jpg" alt="Miraval Life in Balance Spa treatment room" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://parkhyattaviara.com/miravalspa/">Miraval Life in Balance Spa</a>
@@ -409,6 +458,7 @@
   </div>
 
   <div class="item-card">
+    <img class="item-img" src="https://parkhyattaviara.com/media_files/images/Park-Hyatt-Aviara-Batiquitos-Lagoon_1.max-866x866.jpg" alt="Aviara Golf Club overlooking Batiquitos Lagoon" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://parkhyattaviara.com/golf/">Aviara Golf Club</a>
@@ -437,6 +487,7 @@
   </div>
 
   <div class="item-card">
+    <img class="item-img" src="https://parkhyattaviara.com/media_files/images/Adult_Pool.max-1024x1024.jpg" alt="Park Hyatt Aviara pool and cabanas" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://parkhyattaviara.com/">Pools &amp; Waterslides</a>
@@ -473,6 +524,7 @@
   <div class="section-label">Local Attractions &amp; Activities</div>
 
   <div class="item-card">
+    <img class="item-img" src="https://www.legoland.com/california/media/zczdlfhs/hotel-header-image.jpg?format=jpg" alt="LEGOLAND California Resort" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://www.legoland.com/california/">LEGOLAND&reg; California Resort</a>
@@ -487,11 +539,13 @@
   </div>
 
   <div class="item-card">
+    <img class="item-img" src="https://www.theflowerfields.com/wp-content/uploads/2025/10/ToDoImage02-Butterfly.jpg" alt="The Flower Fields at Carlsbad Ranch" onerror="this.style.display='none'">
     <div class="item-info">
       <div class="item-name">
         <a href="https://www.theflowerfields.com/">The Flower Fields at Carlsbad Ranch</a>
+        <span class="badge badge-seasonal">Seasonal</span>
       </div>
-      <div class="item-tag">Seasonal &middot; March through May &middot; 10 minutes</div>
+      <div class="item-tag">March through May &middot; 10 minutes</div>
       <div class="item-desc">
         Nearly 50 acres of giant ranunculus flowers burst into a breathtaking rainbow each spring. Enjoy tractor wagon rides, a sweet pea maze, and stunning photo opportunities. A quintessential Carlsbad experience.
       </div>
@@ -560,6 +614,11 @@
   <!-- ═══════════════════════════════════════ -->
   <div id="beaches"></div>
   <div class="section-label">Nearby Beaches</div>
+
+  <div class="section-hero">
+    <img src="https://parkhyattaviara.com/media_files/images/Park-Hyatt-Aviara-Pool-View-Balcony.max-1920x1920.jpg" alt="Southern California coastline view from Park Hyatt Aviara" onerror="this.parentElement.style.display='none'">
+    <div class="section-hero-overlay">Southern California's finest coastline, minutes from Park Hyatt Aviara</div>
+  </div>
 
   <div class="item-card">
     <div class="item-info">
