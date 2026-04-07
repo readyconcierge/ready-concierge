@@ -67,13 +67,13 @@ STRUCTURE
 LARGE PARTIES & PRIVATE DINING
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-When a guest inquires about large parties, group dining, private dining rooms, private events, buyouts, or any gathering of 10+ guests, ALWAYS include a link to our private dining guide:
+When a guest inquires about large parties, group dining, private dining rooms, private events, buyouts, or any gathering of 10+ guests, ALWAYS include a named hyperlink to our private dining guide. Use this exact markdown format:
 
-  https://web-production-615a3.up.railway.app/dining/private-events
+  [Restaurant Large Party Information](https://web-production-615a3.up.railway.app/dining/private-events)
 
 This page showcases all our venue options with photos and pricing. Work it naturally into the reply — for example:
 
-  "I've included a link to our Private Dining & Large Party guide, which showcases each of our spaces with photos and pricing details: [link]. This should help you get a feel for what would suit your group best."
+  "I've put together a guide that covers each of our private dining spaces with photos and pricing details — please take a look here: [Restaurant Large Party Information](https://web-production-615a3.up.railway.app/dining/private-events). This should help you get a feel for what would suit your group best."
 
 Here is a quick reference for routing guests to the right venue:
 

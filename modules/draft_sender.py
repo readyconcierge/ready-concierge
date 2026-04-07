@@ -178,13 +178,19 @@ def send_reply_to_guest(
     reply_subject = f"Re: {original_subject}" if not original_subject.lower().startswith("re:") else original_subject
 
     # Build a clean HTML version of the draft text
-    draft_html = (
-        draft_text
-        .replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace("\n", "<br>")
-    )
+    # Convert markdown links [text](url) to <a> tags BEFORE escaping HTML
+    import re as _re
+    _link_rx = _re.compile(r'\[([^\]]+)\]\((https?://[^\)]+)\)')
+    _links_found = _link_rx.findall(draft_text)
+    _draft_tmp = draft_text
+    for i, (text, url) in enumerate(_links_found):
+        _draft_tmp = _draft_tmp.replace(f"[{text}]({url})", f"__LINK_{i}__", 1)
+    draft_html = _draft_tmp.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+    for i, (text, url) in enumerate(_links_found):
+        draft_html = draft_html.replace(
+            f"__LINK_{i}__",
+            f'<a href="{url}" style="color:#0a1628; text-decoration:underline; font-weight:600;">{text}</a>',
+        )
 
     html_body = f"""\
 <!DOCTYPE html>
@@ -296,7 +302,22 @@ def _build_html_body(
     feedback_perfect_url: str | None = None,
     feedback_changed_url: str | None = None,
 ) -> str:
-    draft_html = draft_text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+    # Convert markdown links [text](url) to <a> tags BEFORE escaping HTML
+    import re as _re
+    _link_rx = _re.compile(r'\[([^\]]+)\]\((https?://[^\)]+)\)')
+    # Placeholder-protect markdown links so HTML escaping doesn't break them
+    _links_found: list[tuple[str, str]] = _link_rx.findall(draft_text)
+    _draft_tmp = draft_text
+    for i, (text, url) in enumerate(_links_found):
+        _draft_tmp = _draft_tmp.replace(f"[{text}]({url})", f"__LINK_{i}__", 1)
+    # Now safely escape HTML
+    draft_html = _draft_tmp.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+    # Restore links as styled <a> tags
+    for i, (text, url) in enumerate(_links_found):
+        draft_html = draft_html.replace(
+            f"__LINK_{i}__",
+            f'<a href="{url}" style="color:#0a1628; text-decoration:underline; font-weight:600;">{text}</a>',
+        )
 
     # One-click send button (threaded reply) — primary action
     reply_buttons = ""
