@@ -492,156 +492,34 @@ async def inbound_email_webhook(request: Request, db: Session = Depends(get_db))
         sender_email = parsed["sender_email"] or stream.staff_email
         subject = parsed.get("subject", "")
 
-        if re.search(r/^re:/'(›ğcAFedTests, ].``
+        if re.search(r"^re:", subject.strip(), re.IGNORECASE) and DIGEST_SUBJECT_PREFIX.lower() in subject.lower():
+            mark_all, task_ids = parse_done_reply(parsed.get("body", ""))
+            now = datetime.now(timezone.utc)
+            if mark_all:
+                tasks = db.query(CommittedTask).filter(
+                    CommittedTask.stream_id == stream.id,
+                    CommittedTask.completed == False,
+                ).all()
+                for t in tasks:
+                    t.completed = True
+                    t.completed_at = now
+                    t.completed_via = "email"
+                db.commit()
+                logger.info("Marked %d tasks complete via email (done all)", len(tasks))
+            elif task_ids:
+                tasks = db.query(CommittedTask).filter(
+                    CommittedTask.id.in_(task_ids),
+                    CommittedTask.stream_id == stream.id,
+                ).all()
+                for t in tasks:
+                    t.completed = True
+                    t.completed_at = now
+                    t.completed_via = "email"
+                db.commit()
+                logger.info("Marked tasks %s complete via email", task_ids)
+            return JSONResponse({"status": "ok", "action": "tasks_marked_done"})
 
-    ---------------------------------------------------------------------------
-# EVOD GMAIL * BLACK BOX TTL
-json.dumps(payload.signal_recipient_emails),
-    )
-    db.add(stream)
-    db.commit()
-
-    # Wire up the scheduler for the new stream immediately
-    from scheduler import reschedule_stream
-    reschedule_stream(stream)
-
-    logger.info("Created new stream '%s' (id=%d) under property '%s'", stream.name, stream.id, prop.name)
-    return JSOResponse({ "status": "ok", "stream_id": stream.id, "name": stream.name, "display_name": stream.display_name, })
-
-@app.post("/api/streams", tags=["Properties"], status_code=status.HTTP_201_CREATED)
-async def create_stream(payload: CreateStreamRequest, db: Session = Depends(get_db)):
-    """
-    Create a new stream under a property.
-
-    Use this to add departments like Spa, Restaurant Events, etc.
-    """
-    prop = db.query(Property).filter(Property.id == payload.property_id).first()
-    if not prop:
-        raise HTTPException(status_code=404, detail=f"Property {payload.property_id} not found.")
-
-    existing = db.query(Stream).filter(Stream.inbound_email == payload.inbound_email).first()
-    if existing:
-        raise HTTPException(status_code=409, detail=f"Inbound email {payload.inbound_email!r} already in use.")
-
-    stream = Stream(
-        property_id=prop.id,
-        company_id=prop.company_id,
-        name=payload.name,
-        display_name=payload.display_name,
-        inbound_email=payload.inbound_email,
-        staff_email=payload.staff_email,
-        signal_enabled=payload.signal_enabled,
-        signal_frequency=payload.signal_frequency,
-        signal_send_time=payload.signal_send_time,
-        signal_recipient_emails=json.dumps(payload.signal_recipient_emails),
-    )
-    db.add(stream)
-    db.commit()
-
-    # Wire up the scheduler for the new stream immediately
-    from scheduler import reschedule_stream
-    reschedule_stream(stream)
-
-    logger.info("Created new stream '%s' (id=%d) under property '%s'", stream.name, stream.id, prop.name)
-    return JSOResponse({ "status": "ok", "stream_id": stream.id, "name": stream.name, "display_name": stream.display_name, })
-
-@app.post("/api/streams", tags=["Properties"], status_code=status.HTTP_201_CREATED)
-async def create_stream(payload: CreateStreamRequest, db: Session = Depends(get_db)):
-    """
-    Create a new stream under a property.
-
-    Use this to add departments like Spa, Restaurant Events, etc.
-    """
-    prop = db.query(Property).filter(Property.id == payload.property_id).first()
-    if not prop:
-        raise HTTPException(status_code=404, detail=f"Property {payload.property_id} not found.")
-
-    existing = db.query(Stream).filter(Stream.inbound_email == payload.inbound_email).first()
-    if existing:
-        raise HTTPException(status_code=409, detail=f"Inbound email {payload.inbound_email!r} already in use.")
-
-    stream = Stream(
-        property_id=prop.id,
-        company_id=prop.company_id,
-        name=payload.name,
-        display_name=payload.display_name,
-        inbound_email=payload.inbound_email,
-        staff_email=payload.staff_email,
-        signal_enabled=payload.signal_enabled,
-        signal_frequency=payload.signal_frequency,
-        signal_send_time=payload.signal_send_time,
-        signal_recipient_emails=json.dumps(payload.signal_recipient_emails),
-    )
-    db.add(stream)
-    db.commit()
-
-    # Wire up the scheduler for the new stream immediately
-    from scheduler import reschedule_stream
-    reschedule_stream(stream)
-
-    logger.info("Created new stream '%s' (id=%d) under property '%s'", stream.name, stream.id, prop.name)
-    return JSONResponse({ "status": "ok", "stream_id": stream.id, "name": stream.name, "display_name": stream.display_name, })
-
-
-# ---------------------------------------------------------------------------
-# Webhook â€” inbound email
-# ---------------------------------------------------------------------------
-
-@app.post("/webhook/inbound", tags=["Webhook"], status_code=status.HTTP_200_OK)
-async def inbound_email_webhook(request: Request, db: Session = Depends(get_db)):
-    """
-    SendGrid inbound email webhook â€” forwarded-email model.
-
-    Routes incoming emails to the correct stream by matching the recipient
-    address to stream.inbound_email.
-    """
-    try:
-        form = await request.form()
-        form_data = dict(form)
-    except Exception as exc:
-        logger.error("Failed to parse inbound webhook form data: %s", exc)
-        return JSONResponse({"status": "error", "detail": "form parse failure"})
-
-    debug_fields = {k: v for k, v in form_data.items() if k not in ("text", "html", "headers")}
-    logger.info("Inbound webhook raw fields: %s", debug_fields)
-
-    try:
-        parsed = parse_inbound_email(form_data)
-    except ValueError as exc:
-        logger.warning("Could not parse inbound email: %s", exc)
-        return JSONResponse({"status": "error", "detail": str(exc)})
-
-    # Deduplicate by message_id
-    existing = db.query(Email).filter(Email.message_id == parsed["message_id"]).first()
-    if existing:
-        logger.info("Duplicate message_id %s â€” skipping.", parsed["message_id"])
-        return JSONResponse({"status": "duplicate"})
-
-    # Route list@ emails (digest request or "done" reply)
-    recipient = parsed.get("recipient", "")
-    if recipient.startswith("list@"):
-        stream = _resolve_stream(db, recipient) or db.query(Stream).first()
-        if stream is None:
-            return JSONResponse({"status": "error", "detail": "no_stream_configured"})
-
-        sender_email = parsed["sender_email"] or stream.staff_email
-        subject = parsed.get("subject", "")
-
-        if re.search(r/^re:/'(›ğcAFedded@gmail.com/dd1f99317a5ab2799e9117976f706993/ama.formresponse?uid=ed1f99317a5ab2799e9117976f706993/
-       if stream is None:
-            return JSONResponse({"status": "error", "detail": "no_stream_configured"})
-
-        sender_email = parsed["sender_email"] or stream.staff_email
-        subject = parsed.get("subject", "")
-
-        if re.search(r/^re:/'(›ğcAFedded@gmail.com/dd1f99317a5ab2799e9117976f706993/ama.formresponse?uid=ed1f99317a5ab2799e9117976f706993/
-       if stream is None:
-            return JSONResponse({"status": "error", "detail": "no_stream_configured"})
-
-        sender_email = parsed["sender_email"] or stream.staff_email
-        subject = parsed.get("subject", "")
-
-        if re.search(r/^re:/'(›ğcAFedded@gmail.com/dd1f99317a5ab2799e9117976f706993/ama.formresponse?uid=ed1f99317a5ab2799e9117976f706993/timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+        today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
         emails_today = (
             db.query(Email)
             .filter(Email.stream_id == stream.id, Email.received_at >= today_start, Email.draft_sent == True)
