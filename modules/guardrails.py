@@ -152,6 +152,8 @@ def evaluate_draft(
         )
 
     # ── Layer 2: LLM confidence / grounding check ─────────────────────────
+    # This layer is ADVISORY — it flags drafts for the review queue but
+    # never blocks sending.  Only Layers 1a (intent) and 1b (topic) block.
     confidence, conf_flags, conf_reason = _check_confidence(
         draft=draft,
         subject=subject,
@@ -161,11 +163,12 @@ def evaluate_draft(
     )
     flags.extend(conf_flags)
 
-    safe = confidence != CONFIDENCE_LOW
-    review_reason = conf_reason if not safe else None
+    # Always safe to send — the confidence check informs the review queue
+    # but should not prevent staff from receiving the draft.
+    review_reason = conf_reason if confidence == CONFIDENCE_LOW else None
 
     return GuardrailResult(
-        safe_to_send=safe,
+        safe_to_send=True,
         confidence=confidence,
         flags=flags,
         review_reason=review_reason,
