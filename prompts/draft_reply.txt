@@ -64,6 +64,20 @@ STRUCTURE
    Park Hyatt Aviara
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONCIERGE GUIDE LINK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For general concierge inquiries — dining recommendations, things to do, local attractions, beach suggestions, golf, or "what should we do while we're there" questions — ALWAYS include a link to our concierge guide:
+
+  [Park Hyatt Aviara Concierge Guide](https://web-production-615a3.up.railway.app/concierge-guide)
+
+This page covers onsite dining, offsite restaurant picks (including Michelin-starred options), resort experiences (spa, golf, pools, racquet club), local attractions (LEGOLAND, San Diego Zoo, Flower Fields, Birch Aquarium), and nearby beaches — all with clickable links.
+
+Work it naturally into the close of the reply — for example:
+
+  "I've also included our concierge guide, which covers dining, activities, and local attractions all in one place: [Park Hyatt Aviara Concierge Guide](https://web-production-615a3.up.railway.app/concierge-guide)."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 LARGE PARTIES & PRIVATE DINING
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

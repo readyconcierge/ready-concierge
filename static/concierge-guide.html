@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concierge Guide — Park Hyatt Aviara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #1a1a1a;
+    background: #f8f6f3;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 2px 40px rgba(0,0,0,0.06);
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0a1628 0%, #1a2a44 100%);
+    padding: 52px 40px 48px;
+    text-align: center;
+  }
+  .header h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 300;
+    font-size: 34px;
+    color: #c9a96e;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+  }
+
+  /* Intro */
+  .intro {
+    padding: 44px 48px 8px;
+    font-size: 18px;
+    color: #444;
+  }
+  .intro p { margin-bottom: 16px; }
+
+  /* Gold divider */
+  .gold-divider { width: 60px; height: 1px; background: #c9a96e; margin: 36px auto; }
+
+  /* Section label */
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: #c9a96e;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Item card */
+  .item-card {
+    margin: 0 32px 28px;
+    border: 1px solid #e8e4de;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.3s ease;
+  }
+  .item-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .item-info { padding: 24px 28px 28px; }
+  .item-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-size: 22px;
+    color: #0a1628;
+    margin-bottom: 3px;
+  }
+  .item-name a {
+    color: #0a1628;
+    text-decoration: none;
+    border-bottom: 1px solid #c9a96e;
+    transition: color 0.2s;
+  }
+  .item-name a:hover { color: #c9a96e; }
+  .item-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #c9a96e;
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+  .item-desc {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .item-meta {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #999;
+    line-height: 1.7;
+  }
+  .item-meta a { color: #0a1628; text-decoration: underline; }
+
+  /* Badge */
+  .badge {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .badge-onsite { background: #0a1628; color: #c9a96e; }
+  .badge-michelin { background: #c9283b; color: #fff; }
+  .badge-family { background: #2a7d4f; color: #fff; }
+  .badge-resort { background: #c9a96e; color: #0a1628; }
+
+  /* Quick links bar */
+  .quick-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0 32px 8px;
+  }
+  .quick-nav a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #0a1628;
+    text-decoration: none;
+    padding: 8px 18px;
+    border: 1px solid #e0d8cc;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .quick-nav a:hover { background: #0a1628; color: #c9a96e; border-color: #0a1628; }
+
+  /* Footer */
+  .footer {
+    background: linear-gradient(135deg, #0a1628 0%, #1a2a44 100%);
+    padding: 36px 48px;
+    text-align: center;
+  }
+  .footer .hotel-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    color: #c9a96e;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .footer p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
+    line-height: 1.9;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .header { padding: 36px 24px 32px; }
+    .header h1 { font-size: 26px; letter-spacing: 2px; }
+    .intro { padding-left: 28px; padding-right: 28px; }
+    .item-card { margin: 0 16px 20px; }
+    .item-info { padding: 20px 20px 24px; }
+    .quick-nav { gap: 6px; padding: 0 16px 8px; }
+    .quick-nav a { font-size: 10px; padding: 6px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Park Hyatt Aviara</h1>
+    <div class="subtitle">Your Concierge Guide</div>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro">
+    <p>Welcome to Park Hyatt Aviara. Whether you're planning a special evening, an adventure with the family, or simply looking to explore our beautiful stretch of the Southern California coast, we've curated the best of what's on property and nearby.</p>
+  </div>
+
+  <!-- Quick Nav -->
+  <div class="quick-nav">
+    <a href="#onsite-dining">Onsite Dining</a>
+    <a href="#offsite-dining">Offsite Dining</a>
+    <a href="#resort">Resort Experiences</a>
+    <a href="#attractions">Attractions</a>
+    <a href="#beaches">Beaches</a>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ONSITE DINING -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="onsite-dining"></div>
+  <div class="section-label">Onsite Dining</div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/resort-dining/ember-and-rye/">Ember &amp; Rye</a>
+        <span class="badge badge-onsite">Onsite</span>
+      </div>
+      <div class="item-tag">Modern Steakhouse &amp; Seafood</div>
+      <div class="item-desc">
+        Our signature steakhouse overlooking the 18th green of Aviara Golf Club and Batiquitos Lagoon. Chef-driven dishes rooted in fine local ingredients, served in a vintage clubhouse setting with stunning California sunset views.
+      </div>
+      <div class="item-meta">Dinner nightly &middot; Smart casual &middot; Reservations recommended</div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/resort-dining/ponto-lago/">Ponto Lago</a>
+        <span class="badge badge-onsite">Onsite</span>
+      </div>
+      <div class="item-tag">Baja-Inspired &middot; Lagoon Views</div>
+      <div class="item-desc">
+        Locally sourced cuisine and creative cocktails overlooking the lagoon. An inviting atmosphere that blends coastal California flavors with Baja inspiration. Don't miss Friday night Maine lobster, expertly prepared by our culinary team.
+      </div>
+      <div class="item-meta">Breakfast, lunch &amp; dinner daily &middot; Lobster Fridays &middot; Reservations recommended</div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/resort-dining/">Pacific Point Lounge</a>
+        <span class="badge badge-onsite">Onsite</span>
+      </div>
+      <div class="item-tag">Cocktails &amp; Light Bites</div>
+      <div class="item-desc">
+        Craft cocktails and elevated small plates in a sophisticated lounge setting with ocean-facing terraces — ideal for sundowners or a relaxed evening.
+      </div>
+      <div class="item-meta">Afternoon &amp; evening daily</div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/resort-dining/">Water's Edge</a>
+        <span class="badge badge-onsite">Onsite</span>
+      </div>
+      <div class="item-tag">Poolside Dining</div>
+      <div class="item-desc">
+        Casual poolside fare and refreshing beverages served steps from the water. Perfect for a leisurely lunch between dips.
+      </div>
+      <div class="item-meta">Lunch &amp; drinks daily &middot; Pool hours</div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/resort-dining/">Aviara Market</a>
+        <span class="badge badge-onsite">Onsite</span>
+      </div>
+      <div class="item-tag">Grab &amp; Go &middot; Lobby Level</div>
+      <div class="item-desc">
+        Freshly made pastries, artisan coffee, gourmet sandwiches, and snacks — perfect for a morning pick-me-up or a quick bite on your way to explore.
+      </div>
+      <div class="item-meta">Morning through afternoon daily</div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- OFFSITE DINING -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="offsite-dining"></div>
+  <div class="section-label">Offsite Dining</div>
+
+  <!-- Carlsbad -->
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://www.jeune-jolie.com/">Jeune et Jolie</a>
+        <span class="badge badge-michelin">Michelin &#9733;</span>
+      </div>
+      <div class="item-tag">French &middot; Carlsbad &middot; 10 min</div>
+      <div class="item-desc">
+        A Michelin-starred French restaurant on State Street with a chic, rose-hued dining room flooded with natural light. Chef Eric Bost's four-course prix fixe ($105/pp) is an exquisite experience. Walk-in à la carte also available at the bar.
+      </div>
+      <div class="item-meta">2659 State St, Carlsbad &middot; (760) 637-5266 &middot; <a href="https://www.opentable.com/r/jeune-et-jolie-san-diego">Reserve on OpenTable</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://www.thisiscampfire.com/">Campfire</a>
+        <span class="badge badge-michelin">Michelin Guide</span>
+      </div>
+      <div class="item-tag">Live-Fire American &middot; Carlsbad &middot; 10 min</div>
+      <div class="item-desc">
+        A Michelin-recognized live-fire restaurant in a converted Quonset hut, centered around a custom 12-foot wood-burning hearth. Contemporary American with global influences — fire-kissed flavors you won't forget. Great fire-pit patio that families love.
+      </div>
+      <div class="item-meta">2725 State St, Carlsbad &middot; (760) 637-5121 &middot; <a href="https://www.thisiscampfire.com/reserve">Reserve online</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://visitcarlsbad.com/directory/vigiluccis-seafood-steak-and-chop-house/">Vigilucci's Seafood, Steak &amp; Chop House</a>
+      </div>
+      <div class="item-tag">Italian Steakhouse &amp; Seafood &middot; Carlsbad &middot; 10 min</div>
+      <div class="item-desc">
+        A beloved Carlsbad institution with glass doors opening to ocean views. Italian-inspired steaks, chops, and fresh seafood in an elegant atmosphere. Smart-casual attire.
+      </div>
+      <div class="item-meta">3878 Carlsbad Blvd, Carlsbad &middot; (760) 434-2580</div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://visitcarlsbad.com/directory/casa-de-bandini/">Casa de Bandini</a>
+        <span class="badge badge-family">Family Friendly</span>
+      </div>
+      <div class="item-tag">Mexican &middot; Carlsbad &middot; 10 min</div>
+      <div class="item-desc">
+        Authentic Mexican cuisine with a lively atmosphere, colorful patio, and live Mariachi music Wednesday through Sunday. A Carlsbad favorite for families and celebrations alike.
+      </div>
+      <div class="item-meta">The Forum, 1901 Calle Barcelona, Carlsbad</div>
+    </div>
+  </div>
+
+  <!-- Encinitas -->
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://www.herbandsea.com/">Herb &amp; Sea</a>
+      </div>
+      <div class="item-tag">Modern Seafood &middot; Encinitas &middot; 15 min</div>
+      <div class="item-desc">
+        Locally-sourced, sustainable seafood in a beautifully restored 1920s art deco building steps from Moonlight Beach. Chef Aidan Owens crafts a seasonal menu of fresh fish, raw bar, and coastal cuisine. Perfect for a special night out.
+      </div>
+      <div class="item-meta">131 W D St, Encinitas &middot; (760) 704-8300 &middot; <a href="https://www.herbandsea.com/reservations">Reserve online</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://www.pacificadelmar.com/">Pacifica Del Mar</a>
+      </div>
+      <div class="item-tag">Coastal Seafood &middot; Del Mar &middot; 15 min</div>
+      <div class="item-desc">
+        Upscale coastal seafood with panoramic ocean views from the Del Mar Plaza. A consistently outstanding choice for a refined dinner with a view.
+      </div>
+      <div class="item-meta">Del Mar Plaza, 1555 Camino Del Mar &middot; Reservations recommended</div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- RESORT EXPERIENCES -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="resort"></div>
+  <div class="section-label">Resort Experiences</div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/miravalspa/">Miraval Life in Balance Spa</a>
+        <span class="badge badge-resort">Resort</span>
+      </div>
+      <div class="item-tag">Wellness &amp; Spa</div>
+      <div class="item-desc">
+        Award-winning spa offering globally-inspired treatments — massage, skincare, healing arts (acupuncture, Thai massage, crystal energy), mindful art experiences, and culinary wellness classes. Wellness package guests receive all-day access to spa facilities and the Ocean View Pool Deck.
+      </div>
+      <div class="item-meta">Open daily 8:30am – 6:00pm &middot; (760) 603-6902 &middot; <a href="https://parkhyattaviara.com/documents/508/Guide_MiravalLIBS_Aviara.pdf">View Spa Menu</a> &middot; <a href="https://parkhyattaviara.com/documents/625/Day_Packages.pdf">Day Packages</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/golf/">Aviara Golf Club</a>
+        <span class="badge badge-resort">Resort</span>
+      </div>
+      <div class="item-tag">Arnold Palmer Signature Course</div>
+      <div class="item-desc">
+        The only coastal California course designed by Arnold Palmer. Named by Golf Digest and Golf Magazine as one of America's best resort courses, this stunning 18-hole layout winds through rolling hillsides with views of the Batiquitos Lagoon and Pacific Ocean.
+      </div>
+      <div class="item-meta">(760) 603-6900 &middot; <a href="https://www.golfnow.com/tee-times/facility/4082-aviara-golf-club/search">Book Tee Times</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/">Aviara Racquet Club</a>
+        <span class="badge badge-resort">Resort</span>
+      </div>
+      <div class="item-tag">Tennis, Pickleball &amp; More</div>
+      <div class="item-desc">
+        Tennis, pickleball, sand volleyball, badminton, croquet, and bocce ball — all available to resort guests. Equipment and court reservations through the front desk.
+      </div>
+      <div class="item-meta">Available to resort guests daily</div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://parkhyattaviara.com/">Pools &amp; Waterslides</a>
+        <span class="badge badge-family">Family Friendly</span>
+      </div>
+      <div class="item-tag">Two Pools &middot; Dual Waterslides</div>
+      <div class="item-desc">
+        Two stunning outdoor pools — including a family pool with two exciting waterslides — plus the adults-preferred Ocean View Pool Deck with cabanas. The perfect California pool day.
+      </div>
+      <div class="item-meta">Open daily to resort guests</div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://web-production-615a3.up.railway.app/dining/private-events">Private Dining &amp; Large Parties</a>
+        <span class="badge badge-resort">Resort</span>
+      </div>
+      <div class="item-tag">9 Venue Options &middot; Groups of 14–75</div>
+      <div class="item-desc">
+        From intimate private dining rooms at Ponto Lago and Ember &amp; Rye to the Top Golf Swing Suites and Pacific Point Lounge terraces — explore all nine of our private event spaces with photos and pricing.
+      </div>
+      <div class="item-meta"><a href="https://web-production-615a3.up.railway.app/dining/private-events">View all private dining options</a></div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- ATTRACTIONS -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="attractions"></div>
+  <div class="section-label">Local Attractions &amp; Activities</div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://www.legoland.com/california/">LEGOLAND&reg; California Resort</a>
+        <span class="badge badge-family">Family Friendly</span>
+      </div>
+      <div class="item-tag">Theme Park &middot; 10 minutes from resort</div>
+      <div class="item-desc">
+        Over 60 rides, attractions, shows, and a water park — all built from millions of LEGO bricks. Includes SEA LIFE Aquarium on-site. An absolute must for families with children.
+      </div>
+      <div class="item-meta">One LEGOLAND Drive, Carlsbad &middot; <a href="https://www.legoland.com/california/">Tickets &amp; info</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://www.theflowerfields.com/">The Flower Fields at Carlsbad Ranch</a>
+      </div>
+      <div class="item-tag">Seasonal &middot; March through May &middot; 10 minutes</div>
+      <div class="item-desc">
+        Nearly 50 acres of giant ranunculus flowers burst into a breathtaking rainbow each spring. Enjoy tractor wagon rides, a sweet pea maze, and stunning photo opportunities. A quintessential Carlsbad experience.
+      </div>
+      <div class="item-meta">5704 Paseo Del Norte, Carlsbad &middot; <a href="https://www.theflowerfields.com/">Seasonal tickets</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://zoo.sandiegozoo.org/">San Diego Zoo</a>
+        <span class="badge badge-family">Family Friendly</span>
+      </div>
+      <div class="item-tag">World-Class Zoo &middot; 35 minutes</div>
+      <div class="item-desc">
+        One of the world's most famous zoological experiences — 100 acres, 4,000+ animals from 800 species, set in the lush greenery of Balboa Park. An unforgettable day trip for all ages.
+      </div>
+      <div class="item-meta">Balboa Park, San Diego &middot; <a href="https://zoo.sandiegozoo.org/">Tickets &amp; info</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://sdzsafaripark.org/">San Diego Zoo Safari Park</a>
+        <span class="badge badge-family">Family Friendly</span>
+      </div>
+      <div class="item-tag">Wildlife Safari &middot; 40 minutes</div>
+      <div class="item-desc">
+        An expansive wildlife sanctuary where animals roam in open-range habitats. The Africa Tram takes you through vast savannas, and exclusive safari experiences get you even closer.
+      </div>
+      <div class="item-meta">Escondido &middot; <a href="https://sdzsafaripark.org/">Tickets &amp; info</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://aquarium.ucsd.edu/">Birch Aquarium at Scripps</a>
+      </div>
+      <div class="item-tag">Marine Science &middot; La Jolla &middot; 25 minutes</div>
+      <div class="item-desc">
+        Perched on a bluff above the Pacific in La Jolla, Birch Aquarium showcases the groundbreaking research of Scripps Institution of Oceanography. Mesmerizing exhibits and stunning ocean views.
+      </div>
+      <div class="item-meta">2300 Expedition Way, La Jolla &middot; <a href="https://aquarium.ucsd.edu/plan-your-visit">Plan your visit</a></div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">
+        <a href="https://visitcarlsbad.com/">Carlsbad Village</a>
+      </div>
+      <div class="item-tag">Shopping &amp; Strolling &middot; 10 minutes</div>
+      <div class="item-desc">
+        A charming, walkable downtown district between the freeway and the beach. Browse independent boutiques, art galleries, surf shops, and antique stores, then grab a coffee or bite at one of dozens of local eateries.
+      </div>
+      <div class="item-meta"><a href="https://visitcarlsbad.com/">Explore Carlsbad Village</a></div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- BEACHES -->
+  <!-- ═══════════════════════════════════════ -->
+  <div id="beaches"></div>
+  <div class="section-label">Nearby Beaches</div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">South Ponto Beach</div>
+      <div class="item-tag">Closest Beach &middot; 10 minutes</div>
+      <div class="item-desc">
+        Nestled between Coast Highway 101 and Batiquitos Lagoon, South Ponto offers a wide sandy beach, gentle waves, and the quintessential Southern California vibe. Perfect for families and sunbathing.
+      </div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">Carlsbad State Beach (Tamarack)</div>
+      <div class="item-tag">Family Beach &middot; 10 minutes</div>
+      <div class="item-desc">
+        A beautiful stretch of coastline ideal for families, with tide pools to explore, gentle surf, and easy access from the Carlsbad Village area. Great for a morning walk or afternoon with the kids.
+      </div>
+    </div>
+  </div>
+
+  <div class="item-card">
+    <div class="item-info">
+      <div class="item-name">Moonlight Beach</div>
+      <div class="item-tag">Encinitas &middot; 15 minutes</div>
+      <div class="item-desc">
+        One of San Diego County's most popular beaches with volleyball courts, fire pits, a snack bar, and a wide sandy expanse. A lively atmosphere perfect for a full beach day.
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="hotel-name">Park Hyatt Aviara</div>
+    <p>7100 Aviara Resort Drive &middot; Carlsbad, California 92011<br>
+    parkhyattaviara.com &middot; (760) 448-1234</p>
+    <p style="margin-top: 12px; font-size: 10px; color: rgba(255,255,255,0.25);">
+      Your concierge team is available to assist with reservations, directions, and personalized recommendations.
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>

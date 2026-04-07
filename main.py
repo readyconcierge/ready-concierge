@@ -155,6 +155,13 @@ async def dining_private_events():
     return HTMLResponse(content=html_path.read_text(), status_code=200)
 
 
+@app.get("/concierge-guide", tags=["Public Pages"], response_class=HTMLResponse)
+async def concierge_guide():
+    """Serve the luxury concierge guide — dining, activities, attractions."""
+    html_path = _pathlib.Path(__file__).parent / "static" / "concierge-guide.html"
+    return HTMLResponse(content=html_path.read_text(), status_code=200)
+
+
 # ---------------------------------------------------------------------------
 # Feedback — one-click draft quality feedback from email links
 # ---------------------------------------------------------------------------
