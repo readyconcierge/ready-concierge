@@ -461,10 +461,12 @@ async def inbound_email_webhook(request: Request, db: Session = Depends(get_db))
             logger.error("No streams configured. Cannot process email.")
             return JSONResponse({"status": "error", "detail": "no_stream_configured"})
 
-    forwarder_email = parsed["sender_email"] or stream.staff_email
+    # Always send draft replies back to the stream's configured staff_email.
+    # With Outlook auto-forwarding (redirect), the From header is the original
+    # guest — NOT the forwarding inbox — so we cannot rely on parsed sender.
+    forwarder_email = stream.staff_email
     forwarder_name = parsed["sender_name"] or "Staff"
-    if not parsed["sender_email"]:
-        logger.warning("Could not parse forwarder email — falling back to staff email: %s", stream.staff_email)
+    logger.info("Draft replies will be sent to stream staff_email: %s", forwarder_email)
 
     fwd = parsed.get("forwarded")
     if fwd:
