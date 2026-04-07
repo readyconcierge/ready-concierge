@@ -26,12 +26,14 @@ def send_draft_to_staff(
     hotel_name: str,
     intents: list[str],
     feedback_token: str | None = None,
+    draft_id: int | None = None,
 ) -> bool:
     """
     Send an AI-generated draft reply back to the person who forwarded the email.
 
     Includes:
-    - A mailto: link to open a pre-composed reply to the guest (one click)
+    - A "Send Reply" button that sends a threaded reply directly to the guest
+    - A mailto: link as fallback to open a pre-composed reply
     - One-click feedback buttons ("This was perfect" / "This needed changes")
 
     Args:
@@ -43,6 +45,7 @@ def send_draft_to_staff(
         hotel_name:        Hotel/organization name for context.
         intents:           Classified intents for the staff's reference.
         feedback_token:    Unique token for one-click feedback links.
+        draft_id:          DraftReply ID for the one-click send endpoint.
 
     Returns:
         True if SendGrid accepted the message (2xx), False otherwise.
@@ -56,13 +59,17 @@ def send_draft_to_staff(
     # Build mailto: link for one-click reply
     mailto_link = _build_mailto_link(guest_email, original_subject, draft_text)
 
-    # Build feedback URLs
+    # Build feedback URLs and send-reply URL
+    base = settings.base_url.rstrip("/")
     feedback_perfect = None
     feedback_changed = None
     if feedback_token:
-        base = settings.base_url.rstrip("/")
         feedback_perfect = f"{base}/api/feedback/{feedback_token}/perfect"
         feedback_changed = f"{base}/api/feedback/{feedback_token}/changed"
+
+    send_reply_url = None
+    if draft_id:
+        send_reply_url = f"{base}/api/draft/{draft_id}/send"
 
     plain_body = _build_plain_body(
         guest_name=guest_name,
@@ -83,6 +90,7 @@ def send_draft_to_staff(
         intent_label=intent_label,
         ts=ts,
         mailto_link=mailto_link,
+        send_reply_url=send_reply_url,
         feedback_perfect_url=feedback_perfect,
         feedback_changed_url=feedback_changed,
     )
@@ -128,135 +136,93 @@ def send_draft_to_staff(
         return False
 
 
-def _build_mailto_link(guest_email: str, subject: str, draft_text: str) -> str:
-    """Build a mailto: link that opens a pre-composed reply to the guest."""
-    from urllib.parse import quote
-
-    reply_subject = f"Re: {subject}" if not subject.lower().startswith("re:") else subject
-    return f"mailto:{quote(guest_email)}?subject={quote(reply_subject)}&body={quote(draft_text)}"
-
-
-def _build_plain_body(
-    guest_name: str,
+def send_reply_to_guest(
     guest_email: str,
-    original_subject: str,
-    draft_text: str,
-    hotel_name: str,
-    intent_label: str,
-    ts: str,
-) -> str:
-    return f"""\
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-READY CONCIERGE · DRAFT REPLY READY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-From:     {guest_name} <{guest_email}>
-Subject:  {original_subject}
-Type:     {intent_label}
-Time:     {ts}
-
-Review the draft below, then reply to {guest_name} directly.
-Do NOT reply to this email.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-{draft_text}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Powered by Ready Concierge
-"""
-
-
-def _build_html_body(
     guest_name: str,
-    guest_email: str,
     original_subject: str,
+    original_message_id: str,
     draft_text: str,
-    hotel_name: str,
-    intent_label: str,
-    ts: str,
-    mailto_link: str | None = None,
-    feedback_perfect_url: str | None = None,
-    feedback_changed_url: str | None = None,
-) -> str:
-    draft_html = draft_text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+    from_email: str,
+    from_name: str = "Park Hyatt Aviara",
+) -> bool:
+    """
+    Send the AI-generated draft directly to the guest as a threaded reply.
 
-    # One-click reply button
-    mailto_button = ""
-    if mailto_link:
-        mailto_button = f"""
-    <div style="text-align: center; padding: 20px 24px; background: #ffffff; border: 1px solid #e0d8cc; border-top: none;">
-      <a href="{mailto_link}" style="display: inline-block; background: #0a1628; color: #c8a96e; text-decoration: none;
-         padding: 14px 32px; border-radius: 6px; font-family: Arial, sans-serif; font-size: 14px; font-weight: 600;
-         letter-spacing: 0.5px;">
-        Reply to {_esc(guest_name)}
-      </a>
-      <p style="margin: 10px 0 0; font-size: 12px; color: #999;">
-        Opens a pre-composed email to <strong>{_esc(guest_email)}</strong> in your email client
-      </p>
-    </div>"""
+    Uses In-Reply-To and References headers so the reply appears in the
+    guest's inbox as part of the original email conversation.
 
-    # Feedback buttons
-    feedback_block = ""
-    if feedback_perfect_url and feedback_changed_url:
-        feedback_block = f"""
-    <div style="background: #f4f1eb; border: 1px solid #e0d8cc; border-top: none; padding: 16px 24px; text-align: center;">
-      <p style="margin: 0 0 10px; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px;">
-        How was this draft?
-      </p>
-      <a href="{feedback_perfect_url}" style="display: inline-block; background: #2d6a2d; color: #ffffff; text-decoration: none;
-         padding: 8px 20px; border-radius: 4px; font-family: Arial, sans-serif; font-size: 13px; font-weight: 500; margin: 0 6px;">
-        This was perfect
-      </a>
-      <a href="{feedback_changed_url}" style="display: inline-block; background: #ffffff; color: #555; text-decoration: none;
-         padding: 8px 20px; border-radius: 4px; font-family: Arial, sans-serif; font-size: 13px; font-weight: 500;
-         border: 1px solid #ccc; margin: 0 6px;">
-        This needed changes
-      </a>
-    </div>"""
+    Args:
+        guest_email:         The guest's email address.
+        guest_name:          The guest's display name.
+        original_subject:    Subject line of the original email.
+        original_message_id: Message-ID of the original inbound email (for threading).
+        draft_text:          The AI-generated reply text.
+        from_email:          The stream's inbound email (e.g. concierge@aviara.preshift.app).
+        from_name:           Display name for the From field.
 
-    return f"""\
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="font-family: Georgia, serif; color: #1a1a1a; max-width: 680px; margin: 0 auto; padding: 24px;">
+    Returns:
+        True if SendGrid accepted the message (2xx), False otherwise.
+    """
+    settings = get_settings()
 
-  <div style="background: #0a1628; color: #c8a96e; padding: 16px 24px; border-radius: 4px 4px 0 0;">
-    <p style="margin: 0; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;">
-      Ready Concierge &nbsp;·&nbsp; Draft Reply Ready
-    </p>
-  </div>
+    reply_subject = f"Re: {original_subject}" if not original_subject.lower().startswith("re:") else original_subject
 
-  <div style="background: #f9f7f2; border: 1px solid #e0d8cc; border-top: none; padding: 20px 24px;">
-    <table style="width: 100%; font-size: 13px; color: #555;">
-      <tr><td style="padding: 2px 0; width: 80px;"><strong>From</strong></td><td>{_esc(guest_name)} &lt;{_esc(guest_email)}&gt;</td></tr>
-      <tr><td style="padding: 2px 0;"><strong>Subject</strong></td><td>{_esc(original_subject)}</td></tr>
-      <tr><td style="padding: 2px 0;"><strong>Type</strong></td><td>{_esc(intent_label)}</td></tr>
-    </table>
-  </div>
-
-  <div style="background: #ffffff; border: 1px solid #e0d8cc; border-top: none; padding: 28px 24px; font-size: 15px; line-height: 1.7;">
-    {draft_html}
-  </div>
-{mailto_button}
-{feedback_block}
-
-  <div style="background: #f9f7f2; border: 1px solid #e0d8cc; border-top: none; padding: 12px 24px;
-              text-align: center; font-size: 11px; color: #999; border-radius: 0 0 4px 4px;">
-    Powered by Ready Concierge
-  </div>
-
-</body>
-</html>
-"""
-
-
-def _esc(text: str) -> str:
-    """Minimal HTML escaping."""
-    if not text:
-        return ""
-    return (
-        str(text)
+    # Build a clean HTML version of the draft text
+    draft_html = (
+        draft_text
         .replace("&", "&amp;")
         .replace("<", "&lt;")
         .replace(">", "&gt;")
-        .replace('"', "&quot;")
+        .replace("\n", "<br>")
     )
+
+    html_body = f"""\
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: Georgia, serif; color: #1a1a1a; max-width: 680px; margin: 0 auto; padding: 24px; line-height: 1.7;">
+{draft_html}
+</body>
+</html>"""
+
+    payload = {
+        "personalizations": [{"to": [{"email": guest_email, "name": guest_name}]}],
+        "from": {"email": from_email, "name": from_name},
+        "subject": reply_subject,
+        "content": [
+            {"type": "text/plain", "value": draft_text},
+            {"type": "text/html", "value": html_body},
+        ],
+        "headers": {
+            "In-Reply-To": original_message_id,
+            "References": original_message_id,
+        },
+    }
+
+    try:
+        resp = httpx.post(
+            _SENDGRID_API_URL,
+            headers={
+                "Authorization": f"Bearer {settings.sendgrid_api_key}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=15.0,
+        )
+        resp.raise_for_status()
+        logger.info(
+            "Threaded reply sent to guest %r <%s> | subject=%r | from=%s",
+            guest_name, guest_email, reply_subject, from_email,
+        )
+        return True
+
+    except httpx.HTTPStatusError as exc:
+        logger.error(
+            "SendGrid rejected guest reply: %s — %s",
+            exc.response.status_code,
+            exc.response.text,
+        )
+        return False
+    except httpx.RequestError as exc:
+        logger.error("Network error sending guest reply via SendGrid: %s", exc)
+        return False
