@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private Dining &amp; Large Party Options — Park Hyatt Aviara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #1a1a1a;
+    background: #f8f6f3;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .email-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 2px 40px rgba(0,0,0,0.06);
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0a1628 0%, #1a2a44 100%);
+    padding: 52px 40px 48px;
+    text-align: center;
+  }
+  .header h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 300;
+    font-size: 34px;
+    color: #c9a96e;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header .subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+  }
+
+  /* Intro */
+  .intro {
+    padding: 44px 48px 8px;
+    font-size: 18px;
+    color: #444;
+  }
+  .intro p { margin-bottom: 16px; }
+
+  /* Gold divider */
+  .gold-divider {
+    width: 60px;
+    height: 1px;
+    background: #c9a96e;
+    margin: 36px auto;
+  }
+
+  /* Section label */
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: #c9a96e;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  /* Venue Card */
+  .venue-card {
+    margin: 0 32px 40px;
+    border: 1px solid #e8e4de;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.3s ease;
+  }
+  .venue-card:hover {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  .venue-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .dual-img {
+    display: flex;
+    gap: 0;
+  }
+  .dual-img img {
+    width: 50%;
+    object-fit: cover;
+    min-height: 200px;
+  }
+  .venue-info {
+    padding: 28px 32px 32px;
+  }
+  .venue-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    color: #0a1628;
+    margin-bottom: 4px;
+  }
+  .venue-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #c9a96e;
+    margin-bottom: 16px;
+    display: inline-block;
+  }
+  .venue-desc {
+    font-size: 16.5px;
+    color: #444;
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  /* Details grid */
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 28px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+  .detail-item {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .detail-label {
+    font-weight: 600;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+    margin-bottom: 3px;
+  }
+  .detail-value {
+    color: #333;
+    font-weight: 400;
+    font-size: 13.5px;
+  }
+
+  /* Note callout */
+  .note {
+    background: #faf8f5;
+    border-left: 3px solid #c9a96e;
+    padding: 14px 18px;
+    margin-top: 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    color: #777;
+    line-height: 1.65;
+  }
+
+  /* Footer */
+  .footer {
+    background: linear-gradient(135deg, #0a1628 0%, #1a2a44 100%);
+    padding: 36px 48px;
+    text-align: center;
+  }
+  .footer .hotel-name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    color: #c9a96e;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .footer p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
+    line-height: 1.9;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .header { padding: 36px 24px 32px; }
+    .header h1 { font-size: 26px; letter-spacing: 2px; }
+    .intro, .closing { padding-left: 28px; padding-right: 28px; }
+    .venue-card { margin: 0 16px 28px; }
+    .venue-info { padding: 22px 20px 26px; }
+    .details-grid { grid-template-columns: 1fr; gap: 12px; }
+    .dual-img { flex-direction: column; }
+    .dual-img img { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="email-wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Park Hyatt Aviara</h1>
+    <div class="subtitle">Private Dining &amp; Large Party Options</div>
+  </div>
+
+  <!-- Intro -->
+  <div class="intro">
+    <p>Thank you for your interest in hosting a private dining experience with us. Below you will find our available spaces, each offering a distinctive atmosphere for your special occasion.</p>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- ===== PONTO LAGO ===== -->
+  <div class="section-label">Ponto Lago Restaurant</div>
+
+  <!-- Large Private Dining Room -->
+  <div class="venue-card">
+    <img src="/static/images/dining/ponto-lago-large.jpeg" alt="Ponto Lago — Large Private Dining Room">
+    <div class="venue-info">
+      <div class="venue-name">Large Private Dining Room</div>
+      <div class="venue-tag">For parties of 15 – 25 guests</div>
+      <div class="venue-desc">
+        An elegantly appointed private dining room perfect for intimate celebrations and gatherings. With its refined ambiance and dedicated service, this space offers an exceptional private dining experience at Ponto Lago.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Max Capacity</div>
+          <div class="detail-value">24 guests</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Availability</div>
+          <div class="detail-value">5:30pm, 6:00pm, or 6:30pm</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Mon – Thu Minimum</div>
+          <div class="detail-value">$2,500++ F&amp;B spend</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Fri – Sun Minimum</div>
+          <div class="detail-value">$3,000++ F&amp;B spend</div>
+        </div>
+      </div>
+      <div class="note">26% service charge applies. Current menu selections available upon request.</div>
+    </div>
+  </div>
+
+  <!-- Small Private Dining Room -->
+  <div class="venue-card">
+    <img src="/static/images/dining/ponto-lago-small.jpeg" alt="Ponto Lago — Small Private Dining Room">
+    <div class="venue-info">
+      <div class="venue-name">Small Private Dining Room</div>
+      <div class="venue-tag">Guest count flexible · Maximum 14 guests</div>
+      <div class="venue-desc">
+        A more intimate private dining setting with stunning views, ideal for smaller gatherings and celebrations that call for a personal, refined atmosphere.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Max Capacity</div>
+          <div class="detail-value">14 guests</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Availability</div>
+          <div class="detail-value">5:30pm, 6:00pm, or 6:30pm</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Mon – Thu Minimum</div>
+          <div class="detail-value">$1,200++ F&amp;B spend</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Fri – Sun Minimum</div>
+          <div class="detail-value">$1,500++ F&amp;B spend</div>
+        </div>
+      </div>
+      <div class="note">26% service charge applies. Current menu selections available upon request.</div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- ===== EMBER & RYE ===== -->
+  <div class="section-label">Ember &amp; Rye Restaurant</div>
+
+  <!-- Parlor Room – Lunch -->
+  <div class="venue-card">
+    <div class="dual-img">
+      <img src="/static/images/dining/parlor-room-1.jpeg" alt="Ember & Rye Parlor Room — View 1">
+      <img src="/static/images/dining/parlor-room-2.jpeg" alt="Ember & Rye Parlor Room — View 2">
+    </div>
+    <div class="venue-info">
+      <div class="venue-name">Parlor Room — Lunch</div>
+      <div class="venue-tag">For parties of 25 – 45 guests</div>
+      <div class="venue-desc">
+        A stunning semi-private space with panoramic views, perfect for luncheon celebrations and corporate events. The Parlor Room offers an elevated yet relaxed atmosphere with natural light and coastal vistas.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Max Capacity</div>
+          <div class="detail-value">55 guests</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Rental Fee</div>
+          <div class="detail-value">$1,500</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">F&amp;B Minimum</div>
+          <div class="detail-value">$80++ per person</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Service Charge</div>
+          <div class="detail-value">26%</div>
+        </div>
+      </div>
+      <div class="note">Prefixed set menu required for parties of 14 guests and more. Menu selections available upon request.</div>
+    </div>
+  </div>
+
+  <!-- Parlor Room – Dinner -->
+  <div class="venue-card">
+    <img src="/static/images/dining/parlor-room-dinner.jpeg" alt="Ember & Rye Parlor Room — Dinner">
+    <div class="venue-info">
+      <div class="venue-name">Parlor Room — Dinner</div>
+      <div class="venue-tag">For parties of 25 – 45 guests</div>
+      <div class="venue-desc">
+        The same beautiful Parlor Room transforms for evening events with warm lighting and an elevated dinner atmosphere. An adjacent terrace is available to extend your event space.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Max Capacity</div>
+          <div class="detail-value">50 guests</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Rental Fee</div>
+          <div class="detail-value">$2,500</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">F&amp;B Minimum</div>
+          <div class="detail-value">$150++ per person</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Service Charge</div>
+          <div class="detail-value">26%</div>
+        </div>
+      </div>
+      <div class="note">Adjacent terrace available for an additional $500++ rental fee. Menus subject to change based on seasonal availability.</div>
+    </div>
+  </div>
+
+  <!-- Gallery Banquettes -->
+  <div class="venue-card">
+    <img src="/static/images/dining/gallery-banquettes.jpeg" alt="Ember & Rye Gallery Banquettes">
+    <div class="venue-info">
+      <div class="venue-name">Main Dining Room — Gallery Banquettes</div>
+      <div class="venue-tag">For parties of 15 – 24 guests</div>
+      <div class="venue-desc">
+        A distinguished semi-private area within Ember &amp; Rye's main dining room, featuring elegant banquette seating. Ideal for groups seeking the vibrant energy of the restaurant with a dedicated space for their party.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">F&amp;B Minimum</div>
+          <div class="detail-value">$150++ per person</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Service Charge</div>
+          <div class="detail-value">26%</div>
+        </div>
+      </div>
+      <div class="note">A set menu is required for the evening. Fully privatized dining rooms also available — see Parlor Room and Studio options. Ponto Lago is also available for groups of this size.</div>
+    </div>
+  </div>
+
+  <!-- Studio -->
+  <div class="venue-card">
+    <img src="/static/images/dining/studio-room.jpeg" alt="Ember & Rye Studio Private Dining Room">
+    <div class="venue-info">
+      <div class="venue-name">Studio Private Dining Room</div>
+      <div class="venue-tag">Guest count flexible · Maximum 14 guests</div>
+      <div class="venue-desc">
+        A sophisticated, fully private dining room with a distinctive design aesthetic. Equipped with a projector screen, this space is equally suited for corporate meetings, presentations, and private celebrations.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Max Capacity</div>
+          <div class="detail-value">14 guests</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">F&amp;B Minimum</div>
+          <div class="detail-value">$1,500++</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Service Charge</div>
+          <div class="detail-value">26%</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">A/V Note</div>
+          <div class="detail-value">Guests provide projector, computer &amp; HDMI</div>
+        </div>
+      </div>
+      <div class="note">Prefixed set menu required for parties of 14 guests and more. Menu selections available upon request.</div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- ===== TOP GOLF & PPL ===== -->
+  <div class="section-label">Top Golf &amp; Pacific Point Lounge</div>
+
+  <!-- Top Golf -->
+  <div class="venue-card">
+    <div class="dual-img">
+      <img src="/static/images/dining/topgolf-bay.jpeg" alt="Top Golf Swing Suite Bay">
+      <img src="/static/images/dining/command-post.jpeg" alt="Top Golf Command Post">
+    </div>
+    <div class="venue-info">
+      <div class="venue-name">Top Golf Swing Suites &amp; Command Post Buyout</div>
+      <div class="venue-tag">For groups of 20 – 75 guests · Available 11am – 11pm</div>
+      <div class="venue-desc">
+        Privatize the Top Golf Swing Suite Bays and Command Post for an unforgettable entertainment experience. The Command Post lounge features pool, foosball, comfortable seating, and is an ideal area for buffet snacks and food service.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Full Buyout</div>
+          <div class="detail-value">$800/hr + tax &amp; 26% service charge</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">F&amp;B Minimum</div>
+          <div class="detail-value">Waived with buyout</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Private Bartender</div>
+          <div class="detail-value">$300++ per bartender</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Bartender Required</div>
+          <div class="detail-value">For 30+ adult guests</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PPL Living Room -->
+  <div class="venue-card">
+    <img src="/static/images/dining/ppl-living-room.jpeg" alt="Pacific Point Lounge — Living Room">
+    <div class="venue-info">
+      <div class="venue-name">Pacific Point Lounge — Living Room</div>
+      <div class="venue-tag">Reception space · Max 25 guests</div>
+      <div class="venue-desc">
+        An elegant indoor reception space with refined furnishings, perfect for cocktail receptions and pre-dinner gatherings.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Space Fee</div>
+          <div class="detail-value">$500++ for 2 hours</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">F&amp;B Minimum</div>
+          <div class="detail-value">$100++ per person</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Service Charge</div>
+          <div class="detail-value">26%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PPL South Terrace -->
+  <div class="venue-card">
+    <img src="/static/images/dining/ppl-south-terrace.jpeg" alt="Pacific Point Lounge — South Terrace">
+    <div class="venue-info">
+      <div class="venue-name">Pacific Point Lounge — South Terrace</div>
+      <div class="venue-tag">Outdoor reception · Max 50 guests</div>
+      <div class="venue-desc">
+        A gorgeous open-air terrace with lush landscaping and coastal views, ideal for larger receptions and al fresco celebrations.
+      </div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Space Fee</div>
+          <div class="detail-value">$800++ for 2 hours</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">F&amp;B Minimum (Lunch)</div>
+          <div class="detail-value">$80++ per person</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Service Charge</div>
+          <div class="detail-value">26%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="hotel-name">Park Hyatt Aviara</div>
+    <p>7100 Aviara Resort Drive &middot; Carlsbad, California 92011<br>
+    parkhyattaviara.com</p>
+  </div>
+
+</div>
+
+</body>
+</html>

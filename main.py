@@ -38,6 +38,7 @@ from typing import Any
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -106,6 +107,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Serve static assets (venue photos, etc.)
+import pathlib as _pathlib
+_static_dir = _pathlib.Path(__file__).parent / "static"
+if _static_dir.is_dir():
+    app.mount("/static", StaticFiles(directory=str(_static_dir)), name="static")
+
 
 # ---------------------------------------------------------------------------
 # Pydantic models
@@ -135,6 +142,17 @@ class CreateStreamRequest(BaseModel):
 async def health_check():
     """Returns 200 OK if the service is running."""
     return {"status": "ok", "timestamp": datetime.now(timezone.utc).isoformat()}
+
+
+# ---------------------------------------------------------------------------
+# Public pages — guest-facing content linked from draft emails
+# ---------------------------------------------------------------------------
+
+@app.get("/dining/private-events", tags=["Public Pages"], response_class=HTMLResponse)
+async def dining_private_events():
+    """Serve the beautifully formatted private dining & large party options page."""
+    html_path = _pathlib.Path(__file__).parent / "static" / "dining-private-events.html"
+    return HTMLResponse(content=html_path.read_text(), status_code=200)
 
 
 # ---------------------------------------------------------------------------
