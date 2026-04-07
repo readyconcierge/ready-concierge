@@ -1,5 +1,5 @@
 """
-draft_generator.py — Generate context-adaptive reply drafts via Claude.
+draft_generator.py â Generate context-adaptive reply drafts via Claude.
 
 Works for concierge emails, sales inquiries, GM correspondence, and more.
 The forwarder simply forwards any email; Claude drafts the reply.
@@ -85,9 +85,16 @@ def generate_draft(
     model = _select_model(intents)
     intent_str = ", ".join(intents) if intents else "general_inquiry"
 
+    # Extract a usable first name for the greeting
+    clean_name = sender_name.strip() if sender_name else ""
+    # Handle "Last, First (Extra)" format from Outlook
+    if "," in clean_name:
+        parts = clean_name.split(",", 1)
+        clean_name = parts[1].strip().split("(")[0].strip() + " " + parts[0].strip()
+
     user_message = (
         f"Organization: {hotel_name}\n"
-        f"Original Sender: {sender_name}\n"
+        f"Original Sender: {clean_name or 'Unknown'}\n"
         f"Request Type(s): {intent_str}\n"
         f"Subject: {subject}\n"
     )
