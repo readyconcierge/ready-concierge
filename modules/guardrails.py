@@ -201,9 +201,13 @@ def _check_confidence(
         "Respond ONLY with valid JSON — no prose, no markdown fences."
     )
 
-    user = f"""Hotel: {hotel_name}
-Knowledge base provided: {"YES" if has_knowledge else "NO — draft relies on general knowledge only"}
+    kb_section = ""
+    if has_knowledge:
+        kb_section = f"\nKnowledge base content (verified facts):\n{knowledge_context[:1500]}\n"
 
+    user = f"""Hotel: {hotel_name}
+Knowledge base provided: {"YES — see below" if has_knowledge else "NO — draft relies on general knowledge only"}
+{kb_section}
 Guest email subject: {subject}
 Guest email (excerpt): {body[:400]}
 
