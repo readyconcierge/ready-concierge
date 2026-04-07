@@ -287,7 +287,7 @@ async def send_draft_reply_to_guest(draft_id: int, db: Session = Depends(get_db)
     from_name = stream.display_name if stream else "Ready Concierge"
 
     # Send the threaded reply
-    success = send_reply_to_guest(
+    success, error_detail = send_reply_to_guest(
         guest_email=email.sender_email,
         guest_name=email.sender_name or "",
         original_subject=email.subject or "",
@@ -318,11 +318,16 @@ async def send_draft_reply_to_guest(draft_id: int, db: Session = Depends(get_db)
             "</body></html>"
         )
     else:
+        logger.error(
+            "Draft %d send failed | guest=%s | error=%s",
+            draft.id, email.sender_email, error_detail,
+        )
         return HTMLResponse(
             "<html><body style='font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;'>"
             "<p style='font-size:48px;margin-bottom:8px;'>⚠️</p>"
             "<h2 style='color:#0a1628;'>Send failed</h2>"
-            "<p style='color:#888;font-size:16px;'>There was an error sending the reply. Please try again or use the mailto fallback.</p>"
+            f"<p style='color:#888;font-size:16px;'>Error: {_esc_html(error_detail)}</p>"
+            "<p style='color:#aaa;font-size:13px;margin-top:16px;'>Please try again or use the mailto fallback.</p>"
             "</body></html>",
             status_code=500,
         )

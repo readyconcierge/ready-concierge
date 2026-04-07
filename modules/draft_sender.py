@@ -144,12 +144,16 @@ def send_reply_to_guest(
     draft_text: str,
     from_email: str,
     from_name: str = "Park Hyatt Aviara",
-) -> bool:
+) -> tuple[bool, str]:
     """
     Send the AI-generated draft directly to the guest as a threaded reply.
 
     Uses In-Reply-To and References headers so the reply appears in the
     guest's inbox as part of the original email conversation.
+
+    The FROM address uses the verified SendGrid sender (sendgrid_from_email)
+    with Reply-To set to the stream's inbound_email so guest replies
+    flow back into the system.
 
     Args:
         guest_email:         The guest's email address.
@@ -157,15 +161,17 @@ def send_reply_to_guest(
         original_subject:    Subject line of the original email.
         original_message_id: Message-ID of the original inbound email (for threading).
         draft_text:          The AI-generated reply text.
-        from_email:          The stream's inbound email (e.g. concierge@aviara.preshift.app).
+        from_email:          The stream's inbound email (used as Reply-To).
         from_name:           Display name for the From field.
 
     Returns:
-        True if SendGrid accepted the message (2xx), False otherwise.
+        Tuple of (success: bool, error_detail: str).
+        error_detail is empty on success.
     """
     if not guest_email or "@" not in guest_email:
-        logger.error("send_reply_to_guest called with invalid guest_email: %r", guest_email)
-        return False
+        msg = f"Invalid guest_email: {guest_email!r}"
+        logger.error("send_reply_to_guest called with %s", msg)
+        return False, msg
 
     settings = get_settings()
 
@@ -189,9 +195,14 @@ def send_reply_to_guest(
 </body>
 </html>"""
 
+    # Use the verified SendGrid sender as FROM, with Reply-To pointing to
+    # the stream's inbound address so guest replies flow back into the system.
+    verified_from = settings.sendgrid_from_email
+
     payload = {
         "personalizations": [{"to": [{"email": guest_email, "name": guest_name}]}],
-        "from": {"email": from_email, "name": from_name},
+        "from": {"email": verified_from, "name": from_name},
+        "reply_to": {"email": from_email, "name": from_name},
         "subject": reply_subject,
         "content": [
             {"type": "text/plain", "value": draft_text},
@@ -202,6 +213,11 @@ def send_reply_to_guest(
             "References": original_message_id,
         },
     }
+
+    logger.info(
+        "Sending guest reply | to=%s | from=%s (verified) | reply_to=%s | subject=%r",
+        guest_email, verified_from, from_email, reply_subject,
+    )
 
     try:
         resp = httpx.post(
@@ -215,21 +231,19 @@ def send_reply_to_guest(
         )
         resp.raise_for_status()
         logger.info(
-            "Threaded reply sent to guest %r <%s> | subject=%r | from=%s",
-            guest_name, guest_email, reply_subject, from_email,
+            "Threaded reply sent to guest %r <%s> | subject=%r | from=%s | reply_to=%s",
+            guest_name, guest_email, reply_subject, verified_from, from_email,
         )
-        return True
+        return True, ""
 
     except httpx.HTTPStatusError as exc:
-        logger.error(
-            "SendGrid rejected guest reply: %s — %s",
-            exc.response.status_code,
-            exc.response.text,
-        )
-        return False
+        error_detail = f"SendGrid {exc.response.status_code}: {exc.response.text}"
+        logger.error("SendGrid rejected guest reply: %s", error_detail)
+        return False, error_detail
     except httpx.RequestError as exc:
+        error_detail = f"Network error: {exc}"
         logger.error("Network error sending guest reply via SendGrid: %s", exc)
-        return False
+        return False, error_detail
 
 
 def _build_mailto_link(guest_email: str, subject: str, draft_text: str) -> str:
