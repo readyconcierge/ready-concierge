@@ -203,7 +203,7 @@ def _check_confidence(
 
     kb_section = ""
     if has_knowledge:
-        kb_section = f"\nKnowledge base content (verified facts):\n{knowledge_context[:1500]}\n"
+        kb_section = f"\nKnowledge base content (verified facts):\n{knowledge_context[:3000]}\n"
 
     user = f"""Hotel: {hotel_name}
 Knowledge base provided: {"YES — see below" if has_knowledge else "NO — draft relies on general knowledge only"}
