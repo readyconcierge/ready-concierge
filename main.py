@@ -265,6 +265,22 @@ async def send_draft_reply_to_guest(draft_id: int, db: Session = Depends(get_db)
             status_code=404,
         )
 
+    # Verify we have a guest email to send to
+    if not email.sender_email or "@" not in email.sender_email:
+        logger.warning(
+            "Draft %d has no guest email — cannot send | sender_email=%r",
+            draft.id, email.sender_email,
+        )
+        return HTMLResponse(
+            "<html><body style='font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;'>"
+            "<p style='font-size:48px;margin-bottom:8px;'>📧</p>"
+            "<h2 style='color:#0a1628;'>No guest email address</h2>"
+            "<p style='color:#888;font-size:16px;'>The original sender's email could not be extracted from the forwarded message. "
+            "Please use the email fallback link to reply manually.</p>"
+            "</body></html>",
+            status_code=422,
+        )
+
     # Get the stream for the from-address
     stream = db.query(Stream).filter(Stream.id == email.stream_id).first()
     from_email = stream.inbound_email if stream else get_settings().sendgrid_from_email

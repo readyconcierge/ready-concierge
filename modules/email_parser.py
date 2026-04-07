@@ -236,9 +236,34 @@ def extract_forwarded_content(body: str) -> dict[str, Any] | None:
         fwd_body = _clean_body("\n".join(block[body_start:]))
 
     name, email = _parse_address(raw_from)
+
+    # Outlook sometimes puts the email in angle brackets on the same line
+    # or as "Name <email>" or just "Name" — try harder to find an email
+    if not email:
+        # Check if raw_from itself contains something that looks like an email
+        email_match = re.search(r'[\w.+-]+@[\w.-]+\.\w+', raw_from)
+        if email_match:
+            email = email_match.group(0)
+            if not name:
+                name = raw_from.replace(email, "").strip(" <>()\"'")
+
+    # If still no email, scan the nearby header lines for one
+    # (Outlook Rich Text sometimes puts it on the next line or in a mailto:)
+    if not email:
+        for line in block[:10]:
+            email_match = re.search(r'[\w.+-]+@[\w.-]+\.\w+', line)
+            if email_match:
+                email = email_match.group(0)
+                break
+
+    logger.info(
+        "Forwarded email From: line parsed | raw=%r | name=%r | email=%r",
+        raw_from, name, email,
+    )
+
     return {
         "original_sender_raw": raw_from,
-        "original_sender_name": name or _extract_name_from_email(email),
+        "original_sender_name": name or _extract_name_from_email(email) if email else name or raw_from,
         "original_sender_email": email.lower() if email else "",
         "original_subject": subject,
         "original_body": fwd_body,

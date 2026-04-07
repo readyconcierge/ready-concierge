@@ -163,6 +163,10 @@ def send_reply_to_guest(
     Returns:
         True if SendGrid accepted the message (2xx), False otherwise.
     """
+    if not guest_email or "@" not in guest_email:
+        logger.error("send_reply_to_guest called with invalid guest_email: %r", guest_email)
+        return False
+
     settings = get_settings()
 
     reply_subject = f"Re: {original_subject}" if not original_subject.lower().startswith("re:") else original_subject
